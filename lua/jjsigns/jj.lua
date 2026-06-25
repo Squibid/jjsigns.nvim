@@ -34,7 +34,7 @@ end
 --- @return boolean
 function M.is_jj_repo(path)
   local result = vim
-    .system({ 'jj', 'root' }, {
+    .system({ 'jj', 'root', '--ignore-working-copy' }, {
       cwd = path,
       text = true,
     })
@@ -47,7 +47,7 @@ end
 --- @param path string? Directory path (default: cwd)
 --- @return string? root_path
 function M.get_repo_root(path)
-  local stdout, _, code = M.command({ 'root' }, { cwd = path })
+  local stdout, _, code = M.command({ 'root', '--ignore-working-copy' }, { cwd = path })
   if code == 0 and stdout and stdout[1] then
     return vim.fs.normalize(stdout[1])
   end
@@ -59,7 +59,7 @@ end
 --- @return string? working_copy_id
 function M.get_working_copy_id(path)
   local stdout, _, code = M.command(
-    { 'log', '-r', '@', '-T', 'change_id', '--no-graph' },
+    { 'log', '-r', '@', '-T', 'change_id', '--no-graph', '--ignore-working-copy' },
     { cwd = path }
   )
   if code == 0 and stdout and stdout[1] then
@@ -120,7 +120,7 @@ end
 --- @param repo_root string? Repository root
 --- @return boolean
 function M.is_file_tracked(filepath, repo_root)
-  local stdout, _, code = M.command({ 'file', 'list', filepath }, { cwd = repo_root })
+  local stdout, _, code = M.command({ 'file', 'list', '--ignore-working-copy', filepath }, { cwd = repo_root })
   return code == 0 and stdout and #stdout > 0
 end
 

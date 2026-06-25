@@ -132,9 +132,9 @@ function M.attach_to_buffer(bufnr)
     return
   end
 
-  -- Detach first if already attached
-  if buffer_state[bufnr] then
-    M.detach_buffer(bufnr)
+  -- Skip if already attached
+  if buffer_state[bufnr] and buffer_state[bufnr].attached then
+    return
   end
 
   -- Setup autocmds for this buffer
