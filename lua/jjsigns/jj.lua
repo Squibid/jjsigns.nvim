@@ -7,7 +7,12 @@ local M = {}
 function M.command(args, opts)
   opts = opts or {}
 
-  local cmd = { 'jj', '--no-pager', '--color=never' }
+  local cmd = {
+    'jj',
+    '--no-pager',
+    '--color=never',
+    '--config=signing.behavior=drop',
+  }
   vim.list_extend(cmd, args)
 
   local result = vim
@@ -34,7 +39,12 @@ end
 --- @return boolean
 function M.is_jj_repo(path)
   local result = vim
-    .system({ 'jj', 'root', '--ignore-working-copy' }, {
+    .system({
+      'jj',
+      'root',
+      '--ignore-working-copy',
+      '--config=signing.behavior=drop',
+    }, {
       cwd = path,
       text = true,
     })
